@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetroIT</title>
+    <!-- Подключение CSS (опционально) -->
+</head>
+<body>
+    <h1>Харьківський метрополітен</h1>
+    <p id="message">Рзклад поїздів.</p>
+
+    <div>
+    <label for="RouteOption">Номер маршрута:</label>
+    <select id="RouteSelection">
+        <option value="-1" disabled selected>Виберіть маршрут</option>
+    </select>
+    </div>
+    <div id="PageOptions" hidden>
+        <label for="PageOptions">Номер сторінки:</label>
+        <select id="PageSelection">
+            <option value="" disabled selected>Виберіть строрінку</option>
+        </select>    
+    </div>
+
+    <table id="scheduleTable">
+
+    </table>
+
+    <!-- Подключение внешнего JavaScript-файла -->
+    <script type="module" src="script/metro.js"></script>
+</body>
+</html>
