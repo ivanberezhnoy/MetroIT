@@ -1,6 +1,7 @@
 <?php
 
 require_once 'data.php';
+require_once 'utils.php';
 
 // Функции
 function isEveningTime($time) {
@@ -18,8 +19,8 @@ function isDepartureFromStartStation($stationID, $currentDirection, $minStationI
            ($stationID === $maxStationID && $currentDirection < 0);
 }
 
-function addStationPoint(&$infoArray, $stationID, $departureTime, $currentDirection, $minStationID, $maxStationID) {
-    global $stations, $defaultStationWait, $defaultStartStationWait, $additionalTransferStationWait;
+function addStationPoint(&$infoArray, $routeID, $stationID, $departureTime, $currentDirection, $minStationID, $maxStationID) {
+    global $stations, $defaultStationWait, $defaultStartStationWait, $additionalTransferStationWait, $routeTimesFixing;
 
     $stationInfo = $stations[$stationID];
     $info = ["station" => $stationID, "direction" => $currentDirection];
@@ -36,6 +37,40 @@ function addStationPoint(&$infoArray, $stationID, $departureTime, $currentDirect
 
             if (!empty($stationInfo['isTransferStation'])) {
                 $info['arrival'] -= $additionalTransferStationWait;
+            }
+        }
+    }
+
+    // Apply routeTimesFixing
+    if (count($infoArray) > 0)
+    {
+        $previousStationDeparture = $infoArray[count($infoArray) - 1]['departure'];
+        if ($previousStationDeparture == null)
+        {
+            logError("addStationPoint", "Unable to find previous station departure time", implodeMap($infoArray[count($infoArray) - 1]));
+        }
+        else
+        {
+            $routeFixes = array_key_exists($routeID, $routeTimesFixing) ? $routeTimesFixing[$routeID] : null;
+
+            if ($routeFixes != null)
+            {
+                foreach ($routeFixes as $routeFix) 
+                {
+                    if ($routeFix["departure"] == $previousStationDeparture)
+                    {
+                        $routeTimeFix = $routeFix["timeShift"];
+
+                        if (array_key_exists('arrival', $info))
+                        {
+                            $info['arrival'] += $routeTimeFix;
+                        }
+                        if (array_key_exists('departure', $info))
+                        {
+                            $info['departure'] += $routeTimeFix;
+                        }                        
+                    }
+                }                
             }
         }
     }
@@ -59,8 +94,9 @@ function getRouteSchedule($routeID) {
     $maxStationID = count($stations);
     $minStationID = 1;
 
-    while ($currentDepartureTime <= $routeInfo['endTime']) {
-        addStationPoint($infoArray, $currentStation, $currentDepartureTime, $currentDirection, $minStationID, $maxStationID);
+    while ($currentDepartureTime <= $routeInfo['endTime']) 
+    {
+        addStationPoint($infoArray, $routeID, $currentStation, $currentDepartureTime, $currentDirection, $minStationID, $maxStationID);
 
         if (isArrivalFinalStation($currentStation, $currentDirection, $minStationID, $maxStationID)) {
             $isEvening = isEveningTime($currentDepartureTime);
@@ -73,16 +109,14 @@ function getRouteSchedule($routeID) {
             $currentStation += $currentDirection;
         }
 
+        $travelFixTime = 0;
+
         $currentDepartureTime += $travelTime;
 
         if ($currentDepartureTime > $routeInfo['endTime']) {
-            addStationPoint($infoArray, $currentStation, $currentDepartureTime, $currentDirection, $minStationID, $maxStationID);
+            addStationPoint($infoArray, $routeID, $currentStation, $currentDepartureTime, $currentDirection, $minStationID, $maxStationID);
         }
     }
 
     return $infoArray;
 }
-
-/// Пример вызова
-//$routeInfo = getRouteSchedule(1);
-//print_r($routeInfo);
