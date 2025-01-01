@@ -19,26 +19,44 @@ function isDepartureFromStartStation($stationID, $currentDirection, $minStationI
            ($stationID === $maxStationID && $currentDirection < 0);
 }
 
-function addStationPoint(&$infoArray, $routeID, $stationID, $departureTime, $currentDirection, $minStationID, $maxStationID) {
+function addStationPoint(&$infoArray, $routeID, $routeInfo, $stationID, $departureTime, $currentDirection
+            , $minStationID, $maxStationID)
+{
     global $stations, $defaultStationWait, $defaultStartStationWait, $additionalTransferStationWait, $routeTimesFixing;
 
     $stationInfo = $stations[$stationID];
     $info = ["station" => $stationID, "direction" => $currentDirection];
 
-    if (isArrivalFinalStation($stationID, $currentDirection, $minStationID, $maxStationID)) {
-        $info['arrival'] = $departureTime - $defaultStartStationWait;
-    } else {
-        $info['departure'] = $departureTime;
+    // Calculate arrival time
+    if (isArrivalFinalStation($stationID, $currentDirection, $minStationID, $maxStationID) ||
+            isDepartureFromStartStation($stationID, $currentDirection, $minStationID, $maxStationID))
+    {
+        $arrivalTime = $departureTime - $defaultStartStationWait;
+    }
+    else
+    {
+        $arrivalTime = $departureTime - $defaultStationWait;
 
-        if (isDepartureFromStartStation($stationID, $currentDirection, $minStationID, $maxStationID)) {
-            $info['arrival'] = $departureTime - $defaultStartStationWait;
-        } else {
-            $info['arrival'] = $departureTime - $defaultStationWait;
+        if (!empty($stationInfo['isTransferStation'])) 
+        {
+            $arrivalTime -= $additionalTransferStationWait;
+        }        
+    }
 
-            if (!empty($stationInfo['isTransferStation'])) {
-                $info['arrival'] -= $additionalTransferStationWait;
-            }
-        }
+    // Check is is schedule start or finish
+    if ($routeInfo["startTime"] < $arrivalTime)
+    {
+        $info["arrival"] = $arrivalTime;
+    }
+
+    if ($departureTime < $routeInfo["endTime"])
+    {
+        $info["departure"] = $departureTime;
+    }
+
+    if (isArrivalFinalStation($stationID, $currentDirection, $minStationID, $maxStationID))
+    {
+        $info["isFinalStation"] = true;
     }
 
     // Apply routeTimesFixing
@@ -96,25 +114,23 @@ function getRouteSchedule($routeID) {
 
     while ($currentDepartureTime <= $routeInfo['endTime']) 
     {
-        addStationPoint($infoArray, $routeID, $currentStation, $currentDepartureTime, $currentDirection, $minStationID, $maxStationID);
+        addStationPoint($infoArray, $routeID, $routeInfo, $currentStation, $currentDepartureTime, $currentDirection, $minStationID, $maxStationID);
 
         if (isArrivalFinalStation($currentStation, $currentDirection, $minStationID, $maxStationID)) {
             $isEvening = isEveningTime($currentDepartureTime);
-            $travelTime = $isEvening ? ($stations[$currentStation]['roundtripEveningTime'] ?? $defaultRoundtripEveningTime)
-                                     : ($stations[$currentStation]['roundtripDayTime'] ?? $defaultRoundtripDayTime);
-            $travelTime -= $defaultStartStationWait;
+            $travelTime = $isEvening ? ($stations[$currentStation]['roundtripEveningTime'] ?? $defaultRoundtripEveningTime - $defaultStartStationWait)
+                                     : ($stations[$currentStation]['roundtripDayTime'] ?? $defaultRoundtripDayTime - $defaultStartStationWait);
+            //$travelTime -= $defaultStartStationWait;
             $currentDirection *= -1;
         } else {
             $travelTime = $timesToAdd[$currentStation + ($currentDirection > 0 ? $currentDirection : 0) - $minStationID - 1];
             $currentStation += $currentDirection;
         }
 
-        $travelFixTime = 0;
-
         $currentDepartureTime += $travelTime;
 
         if ($currentDepartureTime > $routeInfo['endTime']) {
-            addStationPoint($infoArray, $routeID, $currentStation, $currentDepartureTime, $currentDirection, $minStationID, $maxStationID);
+            addStationPoint($infoArray, $routeID, $routeInfo, $currentStation, $currentDepartureTime, $currentDirection, $minStationID, $maxStationID);
         }
     }
 

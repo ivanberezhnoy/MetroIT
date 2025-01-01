@@ -102,8 +102,11 @@ function printRoutePage(routeSchedule, pageIndex, minStationID, maxStationID)
         if (startPointIndex >= 0 && startPointIndex < travelPointsCount)
         {
             var startPointInfo = routeSchedule[startPointIndex];
+            
+            // Show arrival time if is finial station or schedule end
+            const useArrivalTime = startPointInfo.isFinalStation != undefined || startPointIndex == travelPointsCount - 1;
 
-            startTime.innerHTML = Utils.formatTime(startPointInfo.station == maxStationID ? routeSchedule[startPointIndex].arrival : routeSchedule[startPointIndex].departure);
+            startTime.innerHTML = Utils.formatTime(useArrivalTime ? routeSchedule[startPointIndex].arrival : routeSchedule[startPointIndex].departure);
         }
 
         startPointIndex++;
@@ -111,7 +114,11 @@ function printRoutePage(routeSchedule, pageIndex, minStationID, maxStationID)
         if (finishPointIndex < travelPointsCount && finishPointIndex >= 0)
         {
             var finishPointInfo = routeSchedule[finishPointIndex];
-            endTime.innerHTML = Utils.formatTime(finishPointInfo.station == minStationID ? routeSchedule[finishPointIndex].arrival : routeSchedule[finishPointIndex].departure);
+
+            // Show arrival time if is finial station or schedule end
+            const useArrivalTime = finishPointInfo.isFinalStation != undefined || finishPointIndex == travelPointsCount - 1;
+
+            endTime.innerHTML = Utils.formatTime(useArrivalTime ? routeSchedule[finishPointIndex].arrival : routeSchedule[finishPointIndex].departure);
         }
 
         finishPointIndex--;
