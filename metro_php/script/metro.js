@@ -1,36 +1,12 @@
 import * as Utils from './utils/utils.js';
 import * as UIUTils from './utils/ui_utils.js';
-
-function processPromiseResult(promise)
-{
-  return promise.then(response => 
-    {
-      if (!response.ok) 
-      {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      return response.text(); // Если ошибки PHP включены, они будут в тексте
-    })
-    .then(data => {
-      try {
-        const jsonData = JSON.parse(data);
-        return jsonData;
-      } 
-      catch (e) 
-      {
-        console.error('Ошибка на сервере:', data);
-      }
-    })
-    .catch(error => {
-      console.error('Ошибка сети или запроса:', error);
-    });  
-}
+import * as API from './api.js';
 
 function loadRoutes()
 {
   const selectRouteCombo = document.getElementById("RouteSelection");
 
-  processPromiseResult(fetch('./api/api.php?action=getRoutes')).then(jsonData =>
+  API.loadRoutes().then(jsonData =>
   {
     routes = jsonData;
 
@@ -48,20 +24,16 @@ function loadRoutes()
 
 function loadSchedule()
 {
-  processPromiseResult(fetch('./api/api.php?action=getRoutesSchedule')).then(jsonData =>
-    {
-      schedule = jsonData;
-    }
-    );  
+  API.loadSchedule().then(jsonData => {
+    schedule = jsonData;
+  });
 }
 
 function loadStations()
 {
-  processPromiseResult(fetch('./api/api.php?action=getStations')).then(jsonData =>
-    {
-      stations = jsonData;
-    }
-    );  
+  API.loadStations().then(jsonData => {
+    stations = jsonData;
+  });
 }
 
 function clearScheduleTable()
