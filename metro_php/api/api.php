@@ -30,11 +30,11 @@ switch ($action) {
 
 function getRoutesSchedule() 
 {
-    global $routes;
+    global $routes, $linesTravelTime;
     $result = [];
     foreach ($routes as $routeID => $routeInfo) 
     {
-        $routeSchedule = getRouteSchedule($routeID);
+        $routeSchedule = getRouteSchedule($linesTravelTime[1], $routeID);
 
         $result[$routeID] = $routeSchedule;
     }

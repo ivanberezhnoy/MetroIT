@@ -46,20 +46,43 @@ $routeTimesFixing = [
           ["departure" => 5 * SECONDS_IN_HOUR + 47 * SECONDS_IN_MINUTE + 45, "timeShift"=> -5]] // Тракторний завод
 ];
 
-// Времена между станциями
-$timesToAdd = [
-    2 * SECONDS_IN_MINUTE + 40, // Індустріальна -- Тракторний завод
-    2 * SECONDS_IN_MINUTE + 35, // Тракторний завод -- Масельского
-    2 * SECONDS_IN_MINUTE + 35, // Масельского -- Армійська
-    2 * SECONDS_IN_MINUTE + 45, // Армійська -- Палац спорту
-    2 * SECONDS_IN_MINUTE + 25, // Палац спорту -- Турбоатом
-    2 * SECONDS_IN_MINUTE + 35, // Турбоатом -- Заводська
-    2 * SECONDS_IN_MINUTE + 30, // Заводська -- Спортивна
-    2 * SECONDS_IN_MINUTE + 25, // Спортивна -- Левада
-    2 * SECONDS_IN_MINUTE + 45, // Левада -- м-д Констітуції
-    2 * SECONDS_IN_MINUTE + 5,  // м-д Констітуції -- Центр ринок
-    2 * SECONDS_IN_MINUTE,      // Масельского -- Вокзальна
-    3 * SECONDS_IN_MINUTE       // Вокзальна -- Холодна гора
+// Линии странспорта, kind: 1 - метро
+$transportLines = [
+    1 => ["kind" => 1, "color" => 0xFF0000, "name" => "Холодногорская ветка", "minStation" => 1, "maxStation" => 13]
+];
+
+// Travel time between stations. Line, derection normal and reverse
+$linesTravelTime = [
+    1 => [
+        "normal" => [
+            2 * SECONDS_IN_MINUTE + 40, // Індустріальна -- Тракторний завод
+            2 * SECONDS_IN_MINUTE + 35, // Тракторний завод -- Масельского
+            2 * SECONDS_IN_MINUTE + 35, // Масельского -- Армійська
+            2 * SECONDS_IN_MINUTE + 45, // Армійська -- Палац спорту
+            2 * SECONDS_IN_MINUTE + 25, // Палац спорту -- Турбоатом
+            2 * SECONDS_IN_MINUTE + 35, // Турбоатом -- Заводська
+            2 * SECONDS_IN_MINUTE + 30, // Заводська -- Спортивна
+            2 * SECONDS_IN_MINUTE + 25, // Спортивна -- Левада
+            2 * SECONDS_IN_MINUTE + 45, // Левада -- м-д Констітуції
+            2 * SECONDS_IN_MINUTE + 5,  // м-д Констітуції -- Центр ринок
+            2 * SECONDS_IN_MINUTE,      // Масельского -- Вокзальна
+            3 * SECONDS_IN_MINUTE       // Вокзальна -- Холодна гора
+        ],
+        "reverse" => [
+            2 * SECONDS_IN_MINUTE + 35,  // Тракторний завод -- Індустріальна
+            2 * SECONDS_IN_MINUTE + 35,  // Масельского -- Тракторний завод
+            2 * SECONDS_IN_MINUTE + 35,  // Армійська -- Масельского
+            2 * SECONDS_IN_MINUTE + 50,  // Палац спорту -- Армійська
+            2 * SECONDS_IN_MINUTE + 45,  // Турбоатом -- Палац спорту
+            2 * SECONDS_IN_MINUTE + 40,  // Заводська -- Турбоатом
+            2 * SECONDS_IN_MINUTE + 20,  // Спортивна -- Заводська
+            2 * SECONDS_IN_MINUTE + 25,  // Левада -- Спортивна
+            2 * SECONDS_IN_MINUTE + 30,  // м-д Констітуції -- Левада
+            2 * SECONDS_IN_MINUTE + 5,   // Центр ринок -- м-д Констітуції
+            2 * SECONDS_IN_MINUTE,       // Вокзальна -- Масельского
+            3 * SECONDS_IN_MINUTE,       // Холодна гора -- Вокзальна
+        ]
+    ]    
 ];
 
 ?>

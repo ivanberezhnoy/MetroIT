@@ -96,8 +96,8 @@ function addStationPoint(&$infoArray, $routeID, $routeInfo, $stationID, $departu
     $infoArray[] = $info;
 }
 
-function getRouteSchedule($routeID) {
-    global $routes, $stations, $timesToAdd, $defaultRoundtripDayTime, $defaultRoundtripEveningTime, $defaultStartStationWait;
+function getRouteSchedule($lineTravelTime, $routeID) {
+    global $routes, $stations, $defaultRoundtripDayTime, $defaultRoundtripEveningTime, $defaultStartStationWait;
 
     $infoArray = [];
     $routeInfo = $routes[$routeID] ?? null;
@@ -118,12 +118,15 @@ function getRouteSchedule($routeID) {
 
         if (isArrivalFinalStation($currentStation, $currentDirection, $minStationID, $maxStationID)) {
             $isEvening = isEveningTime($currentDepartureTime);
-            $travelTime = $isEvening ? ($stations[$currentStation]['roundtripEveningTime'] ?? $defaultRoundtripEveningTime - $defaultStartStationWait)
-                                     : ($stations[$currentStation]['roundtripDayTime'] ?? $defaultRoundtripDayTime - $defaultStartStationWait);
-            //$travelTime -= $defaultStartStationWait;
+            $travelTime = $isEvening ? ($stations[$currentStation]['roundtripEveningTime'] ?? $defaultRoundtripEveningTime)
+                                     : ($stations[$currentStation]['roundtripDayTime'] ?? $defaultRoundtripDayTime);
+            $travelTime -= $defaultStartStationWait;
             $currentDirection *= -1;
-        } else {
-            $travelTime = $timesToAdd[$currentStation + ($currentDirection > 0 ? $currentDirection : 0) - $minStationID - 1];
+        } else 
+        {
+            $lineTravelTimeDirection = $currentDirection > 0 ? $lineTravelTime["normal"] : $lineTravelTime["reverse"];
+
+            $travelTime = $lineTravelTimeDirection[$currentStation + ($currentDirection > 0 ? $currentDirection : 0) - $minStationID - 1];
             $currentStation += $currentDirection;
         }
 
