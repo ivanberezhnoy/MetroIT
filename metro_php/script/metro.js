@@ -1,6 +1,7 @@
 import * as Utils from './utils/utils.js';
 import * as UIUTils from './utils/ui_utils.js';
 import * as API from './api.js';
+import * as Geometry from "./utils/Geometry.js"
 
 function loadRoutes()
 {
@@ -10,7 +11,7 @@ function loadRoutes()
   {
     routes = jsonData;
 
-    Object.keys(jsonData).forEach(function(routeID) 
+    Object.keys(routes).forEach(function(routeID) 
     {
         const routeOption = document.createElement("option");
         routeOption.value = jsonData[routeID];
@@ -207,12 +208,82 @@ function handlePageSelection()
     reloadRoutePage();
 }
 
+function updateTrainsPositions()
+{
+    if (svgElement == null)
+    {
+        console.log("Unable to find schema SVG");
+        return;
+    }
+
+    const startStationID = "1";
+    const endStationID = "2";
+ 1
+    if (arrowSvgElement == null || arrowSvgElement == undefined)
+    {
+        console.log("Unable to find arrow");
+        return;
+    }
+    
+    const startStationBBox = Geometry.getSVGElementRect(svgElement, startStationID);
+    const endStationBBox = Geometry.getSVGElementRect(svgElement, endStationID);
+    const arrowSvgBBox = new Geometry.Rect(arrowSvgElement.getBBox());
+
+    if (!startStationBBox || !endStationBBox || !arrowSvgBBox)
+    {
+        console.log("Unable to calculate train position");
+        return 
+    }
+    
+    const startStationCenter = startStationBBox.getCenter();
+    const endStationCenter = endStationBBox.getCenter();
+    const arrowCenter = arrowSvgBBox.getCenter();
+
+    
+    const moveVector = endStationCenter.subtract(startStationCenter);
+    const arrowAngle = Math.atan2(moveVector.y, moveVector.x)  * (180 / Math.PI)
+    
+    const arrowDiffStart = startStationCenter.subtract(arrowCenter);
+    arrowSvgElement.setAttribute('transform', `rotate(${arrowAngle}, ${startStationCenter.x}, ${startStationCenter.y}) translate(${arrowDiffStart.x}, ${arrowDiffStart.y})`);
+
+    arrowSvgElement.style.visibility = 'visible';
+}
+
+function loadSchemaImage()
+{
+    const imgSrc = './media/Схема метрополитен Харьков.svg';
+
+    fetch(imgSrc)
+      .then(response => response.text())
+      .then(svgText => 
+        {
+        const parser = new DOMParser();
+        const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
+        svgElement = svgDoc.querySelector('svg');
+
+        
+        document.getElementById('schemaContainer').appendChild(svgElement);
+    
+        // Теперь можно получить доступ к элементам внутри SVG
+        arrowSvgElement = svgElement.getElementById('arrow');
+        if (arrowSvgElement) 
+        {
+            arrowSvgElement.style.visibility = 'hidden'; 
+        }
+
+        updateTrainsPositions();
+      })
+      .catch(error => console.error('Error loading SVG:', error));    
+}
+
+
 
 document.addEventListener("DOMContentLoaded", () => 
   {
     loadRoutes();
     loadStations();
     loadSchedule();
+    loadSchemaImage();
 
     document.getElementById('RouteSelection').addEventListener('change', handleRouteSelection);
     document.getElementById('PageSelection').addEventListener('change', handlePageSelection);
@@ -286,6 +357,9 @@ document.addEventListener("DOMContentLoaded", () =>
     //         });
     // });
 });
+
+var arrowSvgElement = null;
+var svgElement = null;
 
 var schedule = {};
 var stations = {};

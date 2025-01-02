@@ -147,10 +147,6 @@ function getRouteSchedule($lineTravelTime, $routeID) {
         }
 
         $currentDepartureTime += $travelTime;
-
-        // if ($currentDepartureTime > $routeInfo['endTime']) {
-        //     addStationPoint($infoArray, $routeID, $routeInfo, $currentStation, $currentDepartureTime, $currentDirection, $minStationID, $maxStationID);
-        // }
     }
 
     return $infoArray;
