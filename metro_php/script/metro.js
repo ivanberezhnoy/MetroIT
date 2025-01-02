@@ -230,37 +230,115 @@ function updateTrainsPositions()
         return;
     }
 
-    const startStationID = "1";
-    const endStationID = "2";
- 1
     if (arrowSvgElement == null || arrowSvgElement == undefined)
     {
         console.log("Unable to find arrow");
         return;
     }
-    
-    const startStationBBox = Geometry.getSVGElementRect(svgElement, startStationID);
-    const endStationBBox = Geometry.getSVGElementRect(svgElement, endStationID);
-    const arrowSvgBBox = new Geometry.Rect(arrowSvgElement.getBBox());
 
-    if (!startStationBBox || !endStationBBox || !arrowSvgBBox)
+    if (schedule && lines)
     {
-        console.log("Unable to calculate train position");
-        return 
+        Object.entries(schedule).forEach(([leneID, lineSchedule]) => 
+        {
+            Object.entries(lineSchedule).forEach(([routeID, routeSchedule]) => 
+            {
+                const stationPointCount = Object.keys(routeSchedule).length;
+                var stationPointIndex = 0;
+
+                for (; stationPointIndex + 1 < stationPointCount; ++stationPointIndex)
+                {
+                    var nextStationPointInfo = routeSchedule[stationPointIndex + 1];
+                    if (nextStationPointInfo.arrival != undefined && currentSeconds < nextStationPointInfo.arrival)
+                    {
+                        break;
+                    }
+                }
+
+                // Route is not started yet
+                if (stationPointIndex == 0 && routeSchedule[stationPointIndex].departute > currentSeconds)
+                {
+                    return;
+                }
+
+                // Route is finished
+                if (stationPointIndex + 2 == stationPointCount && routeSchedule[stationPointCount - 1]["arrival"] <= currentSeconds)
+                {
+                    var routeArrow = routesArrowSVG[routeID];
+                    
+                    if (routeArrow != undefined)
+                    {
+                        svgElement.parentNode.removeChild(svgElement);
+
+                        delete routesArrowSVG.routeID;
+                    }
+
+
+                    return;
+                }
+
+                // Станция на которой находится сейчас или последняя которую проехал
+                const currentStationInfo = routeSchedule[stationPointIndex];
+                const currentStationID = lines[leneID]["stations"][currentStationInfo["lineStationIndex"]];
+                // Следующая станци
+                const nextStationInfo = routeSchedule[stationPointIndex + 1];
+                const nextStationID = lines[leneID]["stations"][nextStationInfo["lineStationIndex"]];
+
+                if (currentStationID != nextStationID)
+                {
+                    var routeArrow = routesArrowSVG[routeID];
+                    if (routeArrow == undefined)
+                    {
+                        routeArrow = arrowSvgElement.cloneNode(true);
+                        svgElement.appendChild(routeArrow);
+
+                        routesArrowSVG[routeID] = routeArrow;
+                    }
+
+                    const startStationBBox = Geometry.getSVGElementRect(svgElement, currentStationID);
+                    const endStationBBox = Geometry.getSVGElementRect(svgElement, nextStationID);
+                    const arrowSvgBBox = new Geometry.Rect(routeArrow.getBBox());
+                
+                    if (!startStationBBox || !endStationBBox || !arrowSvgBBox)
+                    {
+                        console.log("Unable to calculate train position");
+                        return 
+                    }
+                    
+                    const startStationCenter = startStationBBox.getCenter();
+                    const endStationCenter = endStationBBox.getCenter();
+                    const arrowCenter = arrowSvgBBox.getCenter();
+                
+                    
+                    const moveVector = endStationCenter.subtract(startStationCenter);
+                    const arrowAngle = Math.atan2(moveVector.y, moveVector.x)  * (180 / Math.PI)
+                    
+                    const arrowDiffStart = startStationCenter.subtract(arrowCenter);
+
+                    // Трансформация чтобы чтобы поставить Arrow на текущую станцию в нужном направлении
+                    var startStationTransform = `rotate(${arrowAngle}, ${startStationCenter.x}, ${startStationCenter.y}) translate(${arrowDiffStart.x}, ${arrowDiffStart.y})`;
+                    
+                    if (currentSeconds > currentStationInfo.departure)
+                    {
+                        const tripSeconds = nextStationInfo.arrival - currentStationInfo.departure;
+                        const movingSeconds =  currentSeconds - currentStationInfo.departure;
+                        const tripFraction = movingSeconds / tripSeconds;
+
+                        var movingTransform = `translate(${tripFraction * moveVector.x}, ${tripFraction * moveVector.y})`;
+
+                        startStationTransform = `${movingTransform} ${startStationTransform}`;
+                    }
+
+                    routeArrow.setAttribute('transform', startStationTransform);
+                
+                    routeArrow.style.visibility = 'visible';
+                }
+            });
+        });
     }
-    
-    const startStationCenter = startStationBBox.getCenter();
-    const endStationCenter = endStationBBox.getCenter();
-    const arrowCenter = arrowSvgBBox.getCenter();
 
-    
-    const moveVector = endStationCenter.subtract(startStationCenter);
-    const arrowAngle = Math.atan2(moveVector.y, moveVector.x)  * (180 / Math.PI)
-    
-    const arrowDiffStart = startStationCenter.subtract(arrowCenter);
-    arrowSvgElement.setAttribute('transform', `rotate(${arrowAngle}, ${startStationCenter.x}, ${startStationCenter.y}) translate(${arrowDiffStart.x}, ${arrowDiffStart.y})`);
+    currentSeconds += 10;
 
-    arrowSvgElement.style.visibility = 'visible';
+    setTimeout(updateTrainsPositions, 1000);
 }
 
 function loadSchemaImage()
@@ -374,10 +452,13 @@ document.addEventListener("DOMContentLoaded", () =>
 });
 
 var arrowSvgElement = null;
+var routesArrowSVG = {};
 var svgElement = null;
 
+var currentSeconds = Utils.secondsInHour * 16 + Utils.secondInMinute * 20 + 35;
+
 const selectedLineID = 1;
-var lines = {};
-var schedule = {};
-var stations = {};
-var routes = {};
+var lines = null;
+var schedule = null;
+var stations = null;
+var routes = null;
