@@ -225,11 +225,6 @@ function updateTrainsPositions()
         return;
     }
 
-    if (!schedule)
-    {
-        return;
-    }
-
     if (arrowSvgElement == null || arrowSvgElement == undefined)
     {
         console.log("Unable to find arrow");
@@ -343,6 +338,12 @@ function updateTrainsPositions()
                     var movingTransform = `translate(${tripFraction * moveVector.x}, ${tripFraction * moveVector.y})`;
 
                     startStationTransform = `${movingTransform} ${startStationTransform}`;
+
+                    routeArrow.style.fill = "#231f20";
+                }
+                else if (currentStationID != nextStationID)
+                {
+                    routeArrow.style.fill = "#23ff20";
                 }
 
                 routeArrow.setAttribute('transform', startStationTransform);
