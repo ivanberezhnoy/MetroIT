@@ -8,13 +8,14 @@ header('Content-Type: application/json');
 
 require_once 'data.php';
 require_once 'route_info.php';
+require_once 'utils.php';
 
 // Получаем параметр "action"
 $action = $_GET['action'] ?? $_POST['action'] ?? null;
 
 switch ($action) {
-    case 'getRoutesSchedule':
-        getRoutesSchedule();
+    case 'getLinesRoutesSchedule':
+        getLinesRoutesSchedule();
         break;
     case 'getRoutes':
         getRoutes();
@@ -22,21 +23,43 @@ switch ($action) {
     case 'getStations':
         getStations();
         break;
+    case 'getLines':
+        getLines();
+        break;
+
     default:
         echo json_encode(['error' => 'Invalid action']);
         http_response_code(400); // Bad Request
         break ;
 }
-
-function getRoutesSchedule() 
+function getLines()
 {
-    global $routes, $linesTravelTime;
+    global $transportLines;
+
+    echo json_encode($transportLines);
+}
+
+// First key lineID, next key routeID, and array of schedule points
+// The schedule point contains stationIndex is the index of station in $transportLines['stations']
+function getLinesRoutesSchedule() 
+{
+    global $routes, $linesTravelTime, $transportLines;
     $result = [];
+
     foreach ($routes as $routeID => $routeInfo) 
     {
         $routeSchedule = getRouteSchedule($linesTravelTime[1], $routeID);
 
-        $result[$routeID] = $routeSchedule;
+        $routeLineID = $routes[$routeID]["lineID"];
+
+        if (!array_key_exists($routeLineID, $transportLines))
+        {
+            logError("getLinesRoutesSchedule", "Unable to find route line", "routeID: $routeID, lineID: $routeLineID");
+
+            continue;
+        }
+
+        $result[$routeLineID][$routeID] = $routeSchedule;
     }
 
     echo json_encode($result);
@@ -45,13 +68,8 @@ function getRoutesSchedule()
 function getRoutes() 
 {
     global $routes;
-    $result = [];
-    foreach ($routes as $routeID => $routeInfo) 
-    {
-        array_push($result, $routeID);
-    }
 
-    echo json_encode($result);
+    echo json_encode($routes);
         
     // $body = file_get_contents('php://input');
     // $data = json_decode($body, true);

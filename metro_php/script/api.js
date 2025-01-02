@@ -30,7 +30,12 @@ export function loadRoutes()
 
 export function loadSchedule()
 {
-  return processPromiseResult(fetch('./api/api.php?action=getRoutesSchedule')).then(jsonData => jsonData);  
+  return processPromiseResult(fetch('./api/api.php?action=getLinesRoutesSchedule')).then(jsonData => jsonData);  
+}
+
+export function loadLines()
+{
+  return processPromiseResult(fetch('./api/api.php?action=getLines')).then(jsonData => jsonData);  
 }
 
 export function loadStations()

@@ -9,29 +9,29 @@ function isEveningTime($time) {
     return $time > $eveningStartTime;
 }
 
-function isArrivalFinalStation($stationID, $currentDirection, $minStationID, $maxStationID) {
-    return ($stationID === $minStationID && $currentDirection < 0) ||
-           ($stationID === $maxStationID && $currentDirection > 0);
+function isArrivalFinalStation($stationIndex, $currentDirection, $minStationIndex, $maxStationIndex) {
+    return ($stationIndex === $minStationIndex && $currentDirection < 0) ||
+           ($stationIndex === $maxStationIndex && $currentDirection > 0);
 }
 
-function isDepartureFromStartStation($stationID, $currentDirection, $minStationID, $maxStationID) {
-    return ($stationID === $minStationID && $currentDirection > 0) ||
-           ($stationID === $maxStationID && $currentDirection < 0);
+function isDepartureFromStartStation($stationIndex, $currentDirection, $minStationIndex, $maxStationIndex) {
+    return ($stationIndex === $minStationIndex && $currentDirection > 0) ||
+           ($stationIndex === $maxStationIndex && $currentDirection < 0);
 }
 
-function addStationPoint(&$infoArray, $routeID, $routeInfo, $stationID, $departureTime, $currentDirection
-            , $minStationID, $maxStationID)
+function addStationPoint(&$infoArray, $routeID, $routeInfo, $stationIndex, $departureTime, $currentDirection
+            , $minStationIndex, $maxStationIndex)
 {
     global $stations, $defaultStationWait, $defaultStartStationWait, $additionalTransferStationWait, $routeTimesFixing, $maxTimeLimit;
 
-    $stationInfo = $stations[$stationID];
-    $info = ["station" => $stationID, "direction" => $currentDirection];
+    $stationInfo = $stations[$stationIndex];
+    $info = ["lineStationIndex" => $stationIndex, "direction" => $currentDirection];
 
     $arrivalTime = 0;
 
     // Calculate arrival time
-    if (isArrivalFinalStation($stationID, $currentDirection, $minStationID, $maxStationID) ||
-            isDepartureFromStartStation($stationID, $currentDirection, $minStationID, $maxStationID))
+    if (isArrivalFinalStation($stationIndex, $currentDirection, $minStationIndex, $maxStationIndex) ||
+            isDepartureFromStartStation($stationIndex, $currentDirection, $minStationIndex, $maxStationIndex))
     {
         $arrivalTime = $departureTime - $defaultStartStationWait;
     }
@@ -86,7 +86,7 @@ function addStationPoint(&$infoArray, $routeID, $routeInfo, $stationID, $departu
         $info["departure"] = $departureTime;
     }
 
-    if (isArrivalFinalStation($stationID, $currentDirection, $minStationID, $maxStationID))
+    if (isArrivalFinalStation($stationIndex, $currentDirection, $minStationIndex, $maxStationIndex))
     {
         $info["isFinalStation"] = true;
     }    
@@ -104,8 +104,10 @@ function addStationPoint(&$infoArray, $routeID, $routeInfo, $stationID, $departu
     return array_key_exists("departure", $info) ? $info['departure'] : $departureTime;
 }
 
-function getRouteSchedule($lineTravelTime, $routeID) {
-    global $routes, $stations, $defaultRoundtripDayTime, $defaultRoundtripEveningTime, $defaultStartStationWait, $maxTimeLimit;
+function getRouteSchedule($lineTravelTime, $routeID) 
+{
+    global $routes, $stations, $defaultRoundtripDayTime, $defaultRoundtripEveningTime, 
+        $defaultStartStationWait, $maxTimeLimit, $linesTravelTime, $transportLines;
 
     $infoArray = [];
     $routeInfo = $routes[$routeID] ?? null;
@@ -117,13 +119,47 @@ function getRouteSchedule($lineTravelTime, $routeID) {
     $currentStation = $routeInfo['startStation'];
     $currentDepartureTime = $routeInfo['startTime'];
     $currentDirection = $routeInfo['direction'];
-    $maxStationID = count($stations);
-    $minStationID = 1;
+
+    $lineID = $routeInfo["lineID"];
+
+    if (!array_key_exists($lineID, $transportLines))
+    {
+        logError("getRouteSchedule", "Unknown line", "routeID: $routeID, lineID: $lineID");
+        return $infoArray;
+    }
+
+    $maxStationIndex = count($transportLines[$lineID]["stations"]);
+    $minStationIndex = 1;
+
+    if (!array_key_exists($lineID, $linesTravelTime))
+    {
+        logError("getRouteSchedule", "Unable to find line travel times for specified route", "routeID: $routeID, lineID: $lineID");
+
+        return $infoArray;
+    }
+
+    if (count($linesTravelTime[$lineID]['normal']) + 1 != $maxStationIndex)
+    {
+        logError("getRouteSchedule", "Travel time is inconsistent", "Travel times count: {($linesTravelTime[$lineID]['normal'] + 1)}, max station index: $maxStationIndex");
+
+        return $infoArray;
+    }
+
+    if (array_key_exists('reverse', $linesTravelTime[$lineID]))
+    {
+        if (count($linesTravelTime[$lineID]['reverse']) + 1 != $maxStationIndex)
+        {
+            logError("getRouteSchedule", "Travel reverse time is inconsistent", "Travel times count: {($linesTravelTime[$lineID]['reverse'] + 1)}, max station index: $maxStationIndex");
+    
+            return $infoArray;
+        }        
+    }
+
 
     $prevStationArrival = null;
     while (($prevStationArrival == null || $prevStationArrival < $routeInfo['endTime'])) 
     {
-        $currentDepartureTime = addStationPoint($infoArray, $routeID, $routeInfo, $currentStation, $currentDepartureTime, $currentDirection, $minStationID, $maxStationID);
+        $currentDepartureTime = addStationPoint($infoArray, $routeID, $routeInfo, $currentStation, $currentDepartureTime, $currentDirection, $minStationIndex, $maxStationIndex);
 
         if ($currentDepartureTime == $maxTimeLimit)
         {
@@ -132,7 +168,7 @@ function getRouteSchedule($lineTravelTime, $routeID) {
 
         $prevStationArrival = count($infoArray) > 1 ? $infoArray[count($infoArray) - 1]["arrival"] : $infoArray[0]["departure"];
 
-        if (isArrivalFinalStation($currentStation, $currentDirection, $minStationID, $maxStationID)) {
+        if (isArrivalFinalStation($currentStation, $currentDirection, $minStationIndex, $maxStationIndex)) {
             $isEvening = isEveningTime($currentDepartureTime);
             $travelTime = $isEvening ? ($stations[$currentStation]['roundtripEveningTime'] ?? $defaultRoundtripEveningTime)
                                      : ($stations[$currentStation]['roundtripDayTime'] ?? $defaultRoundtripDayTime);
@@ -140,9 +176,9 @@ function getRouteSchedule($lineTravelTime, $routeID) {
             $currentDirection *= -1;
         } else 
         {
-            $lineTravelTimeDirection = $currentDirection > 0 ? $lineTravelTime["normal"] : $lineTravelTime["reverse"];
+            $lineTravelTimeDirection = $currentDirection > 0 || !array_key_exists("reverse", $lineTravelTime) ? $lineTravelTime["normal"] : $lineTravelTime["reverse"];
 
-            $travelTime = $lineTravelTimeDirection[$currentStation + ($currentDirection > 0 ? $currentDirection : 0) - $minStationID - 1];
+            $travelTime = $lineTravelTimeDirection[$currentStation + ($currentDirection > 0 ? $currentDirection : 0) - $minStationIndex - 1];
             $currentStation += $currentDirection;
         }
 

@@ -10,6 +10,18 @@
             "type": "php",
             "request": "launch",
             "port": 9003
-        }
+        },
+        {
+            "type": "pwa-chrome",
+            "request": "launch",
+            "name": "Launch Chrome against localhost",
+            "url": "http://localhost:8000",
+            "webRoot": "${workspaceFolder}",
+            "pathMappings": {
+                "/script": "${workspaceFolder}/script" // Сопоставление пути для папки script
+              },             
+            "sourceMaps": true,
+            "trace": true // Для диагностики              
+        }   
     ]
 }

@@ -11,16 +11,27 @@ function loadRoutes()
   {
     routes = jsonData;
 
+    console.log(routes);
     Object.keys(routes).forEach(function(routeID) 
     {
-        const routeOption = document.createElement("option");
-        routeOption.value = jsonData[routeID];
-        routeOption.text = jsonData[routeID];
-  
-        selectRouteCombo.add(routeOption);
+        if (routes[routeID]["lineID"] == selectedLineID)
+        {
+            const routeOption = document.createElement("option");
+            routeOption.value = routeID;
+            routeOption.text = routeID;
+    
+            selectRouteCombo.add(routeOption);
+        }
     });
   }
   );
+}
+
+function loadLines()
+{
+    API.loadLines().then(jsonData => {
+        lines = jsonData;
+      });
 }
 
 function loadSchedule()
@@ -43,16 +54,19 @@ function clearScheduleTable()
     scheduleTable.innerHTML = "";
 }
 
-function printRoutePage(routeSchedule, pageIndex, minStationID, maxStationID)
+function printRoutePage(routeSchedule, pageIndex, line)
 {
     const travelPointsCount = routeSchedule.length;
 
     let firstFinishPointIndex = -1;
 
+    const minStationIndex = 1;
+    const maxStationIndex = Object.keys(line['stations']).length;
+
     for (let currentPointIndex = 0; currentPointIndex < travelPointsCount; currentPointIndex++)
     {
         let travelPoint = routeSchedule[currentPointIndex];
-        if (travelPoint.station === minStationID && travelPoint.direction < 0)
+        if (travelPoint.lineStationIndex === minStationIndex && travelPoint.direction < 0)
         {
             firstFinishPointIndex = currentPointIndex;
 
@@ -67,7 +81,7 @@ function printRoutePage(routeSchedule, pageIndex, minStationID, maxStationID)
         return false;
     }
 
-    const stationsCount = 2 * (maxStationID - minStationID + 1); 
+    const stationsCount = 2 * (maxStationIndex - minStationIndex + 1); 
 
     console.log("stationsCount: " + stationsCount);
 
@@ -85,7 +99,7 @@ function printRoutePage(routeSchedule, pageIndex, minStationID, maxStationID)
     scheduleTable.style = "border: 1px solid black;border-collapse: collapse;";
 
 
-    for (let stationID = minStationID; stationID <= maxStationID; stationID++)
+    for (let stationIndex = minStationIndex; stationIndex <= maxStationIndex; stationIndex++)
     {
         var row = UIUTils.addTableRow(scheduleTable, scheduleTable.rows.length);
 
@@ -94,7 +108,7 @@ function printRoutePage(routeSchedule, pageIndex, minStationID, maxStationID)
         startRemarks.style = "width:100px;"
 
         var stationName = UIUTils.addRowCell(row, 2);
-        stationName.innerHTML = stations[stationID].name;
+        stationName.innerHTML = stations[line['stations'][stationIndex]].name;
         
         var endRemarks = UIUTils.addRowCell(row, 3);
         endRemarks.style = "width:100px;"
@@ -136,12 +150,9 @@ function reloadRoutePage()
     var pageSelectionCombo = document.getElementById("PageSelection");
     const selectedPageValue = parseInt(pageSelectionCombo.value);
 
-    console.log("reloadRoutePage");
     if (selectedRouteValue > 0 && selectedPageValue >= 0 && schedule[selectedRouteValue] != undefined)
     {
-        const startStationID = 1;
-        const finishStationID = Object.keys(stations).length;
-        printRoutePage(schedule[selectedRouteValue], selectedPageValue, startStationID, finishStationID);
+        printRoutePage(schedule[selectedLineID][selectedRouteValue], selectedPageValue, lines[selectedLineID]);
     }
 }
 
@@ -163,26 +174,25 @@ function handleRouteSelection()
   
   if (selectedRouteValue > 0) 
   {
-      var routeSchedule = schedule[selectedRouteValue];
+      var routeSchedule = schedule[selectedLineID][selectedRouteValue];
 
       if (routeSchedule == null || routeSchedule == undefined)
       {
           return;
       }
 
-      const startStationID = 1;
-      const finishStationID = Object.keys(stations).length;
+      const startStationIndex = 1;
 
       var pagesCount = 0;
       for (const travelPoint of routeSchedule)
       {
-          if (travelPoint.station == startStationID && travelPoint.direction > 0)
+          if (travelPoint.lineStationIndex == startStationIndex && travelPoint.direction > 0)
           {
               ++pagesCount;
           }
       }
 
-      if (routeSchedule[0].station != startStationID || routeSchedule[0].direction < 0)
+      if (routeSchedule[0].lineStationIndex != startStationIndex || routeSchedule[0].direction < 0)
       {
           ++pagesCount;
       }
@@ -213,6 +223,11 @@ function updateTrainsPositions()
     if (svgElement == null)
     {
         console.log("Unable to find schema SVG");
+        return;
+    }
+
+    if (!schedule)
+    {
         return;
     }
 
@@ -280,6 +295,7 @@ function loadSchemaImage()
 
 document.addEventListener("DOMContentLoaded", () => 
   {
+    loadLines();
     loadRoutes();
     loadStations();
     loadSchedule();
@@ -361,6 +377,8 @@ document.addEventListener("DOMContentLoaded", () =>
 var arrowSvgElement = null;
 var svgElement = null;
 
+const selectedLineID = 1;
+var lines = {};
 var schedule = {};
 var stations = {};
 var routes = {};
