@@ -11,7 +11,6 @@ function loadRoutes()
   {
     routes = jsonData;
 
-    console.log(routes);
     Object.keys(routes).forEach(function(routeID) 
     {
         if (routes[routeID]["lineID"] == selectedLineID)
@@ -60,8 +59,8 @@ function printRoutePage(routeSchedule, pageIndex, line)
 
     let firstFinishPointIndex = -1;
 
-    const minStationIndex = 1;
-    const maxStationIndex = Object.keys(line['stations']).length;
+    const minStationIndex = 0;
+    const maxStationIndex = Object.keys(line['stations']).length - 1;
 
     for (let currentPointIndex = 0; currentPointIndex < travelPointsCount; currentPointIndex++)
     {
@@ -150,7 +149,7 @@ function reloadRoutePage()
     var pageSelectionCombo = document.getElementById("PageSelection");
     const selectedPageValue = parseInt(pageSelectionCombo.value);
 
-    if (selectedRouteValue > 0 && selectedPageValue >= 0 && schedule[selectedRouteValue] != undefined)
+    if (selectedRouteValue > 0 && selectedPageValue >= 0 && schedule[selectedLineID][selectedRouteValue] != undefined)
     {
         printRoutePage(schedule[selectedLineID][selectedRouteValue], selectedPageValue, lines[selectedLineID]);
     }

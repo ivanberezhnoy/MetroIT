@@ -33,13 +33,13 @@ $stations = [
 
 // Данные маршрутов "endTime" - время прибытия на конечную, "startTime" - время отправления с начальной станции
 $routes = [
-    1 => ["lineID" => 1, "startStation" => 1, "direction" => 1, "startTime" => (5 * SECONDS_IN_HOUR + 45 * SECONDS_IN_MINUTE), "endTime" => (20 * SECONDS_IN_HOUR + 15 * SECONDS_IN_MINUTE)],
-    2 => ["lineID" => 1, "startStation" => 13, "direction" => -1, "startTime" => (5 * SECONDS_IN_HOUR + 40 * SECONDS_IN_MINUTE), "endTime" => (22 * SECONDS_IN_HOUR + 10 * SECONDS_IN_MINUTE)],
-    3 => ["lineID" => 1, "startStation" => 13, "direction" => -1, "startTime" => (5 * SECONDS_IN_HOUR + 50 * SECONDS_IN_MINUTE), "endTime" => (20 * SECONDS_IN_HOUR + 20 * SECONDS_IN_MINUTE)],
-    4 => ["lineID" => 1, "startStation" => 6, "direction" => -1, "startTime" => (5 * SECONDS_IN_HOUR + 37 * SECONDS_IN_MINUTE), "endTime" => (22 * SECONDS_IN_HOUR + 20 * SECONDS_IN_MINUTE)],
-    5 => ["lineID" => 1, "startStation" => 1, "direction" => 1, "startTime" => (5 * SECONDS_IN_HOUR + 35 * SECONDS_IN_MINUTE), "endTime" => (22 * SECONDS_IN_HOUR + 22 * SECONDS_IN_MINUTE)],
-    6 => ["lineID" => 1, "startStation" => 13, "direction" => -1, "startTime" => (5 * SECONDS_IN_HOUR + 31 * SECONDS_IN_MINUTE), "endTime" => (21 * SECONDS_IN_HOUR + 50 * SECONDS_IN_MINUTE)],
-    7 => ["lineID" => 1, "startStation" => 6, "direction" => 1, "startTime" => (5 * SECONDS_IN_HOUR + 37 * SECONDS_IN_MINUTE), "endTime" => (22 * SECONDS_IN_HOUR + 2 * SECONDS_IN_MINUTE)]
+    1 => ["lineID" => 1, "startStationIndex" => 0, "direction" => 1, "startTime" => (5 * SECONDS_IN_HOUR + 45 * SECONDS_IN_MINUTE), "endTime" => (20 * SECONDS_IN_HOUR + 15 * SECONDS_IN_MINUTE)],
+    2 => ["lineID" => 1, "startStationIndex" => 12, "direction" => -1, "startTime" => (5 * SECONDS_IN_HOUR + 40 * SECONDS_IN_MINUTE), "endTime" => (22 * SECONDS_IN_HOUR + 10 * SECONDS_IN_MINUTE)],
+    3 => ["lineID" => 1, "startStationIndex" => 12, "direction" => -1, "startTime" => (5 * SECONDS_IN_HOUR + 50 * SECONDS_IN_MINUTE), "endTime" => (20 * SECONDS_IN_HOUR + 20 * SECONDS_IN_MINUTE)],
+    4 => ["lineID" => 1, "startStationIndex" => 5, "direction" => -1, "startTime" => (5 * SECONDS_IN_HOUR + 37 * SECONDS_IN_MINUTE), "endTime" => (22 * SECONDS_IN_HOUR + 20 * SECONDS_IN_MINUTE)],
+    5 => ["lineID" => 1, "startStationIndex" => 0, "direction" => 1, "startTime" => (5 * SECONDS_IN_HOUR + 35 * SECONDS_IN_MINUTE), "endTime" => (22 * SECONDS_IN_HOUR + 22 * SECONDS_IN_MINUTE)],
+    6 => ["lineID" => 1, "startStationIndex" => 12, "direction" => -1, "startTime" => (5 * SECONDS_IN_HOUR + 31 * SECONDS_IN_MINUTE), "endTime" => (21 * SECONDS_IN_HOUR + 50 * SECONDS_IN_MINUTE)],
+    7 => ["lineID" => 1, "startStationIndex" => 5, "direction" => 1, "startTime" => (5 * SECONDS_IN_HOUR + 37 * SECONDS_IN_MINUTE), "endTime" => (22 * SECONDS_IN_HOUR + 2 * SECONDS_IN_MINUTE)]
 ];
 
 // Исправление времени движения маршрутов

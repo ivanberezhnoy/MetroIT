@@ -40,7 +40,7 @@ function getLines()
 }
 
 // First key lineID, next key routeID, and array of schedule points
-// The schedule point contains stationIndex is the index of station in $transportLines['stations']
+// The schedule point contains stationIndex(starts from 0) is the index of station in $transportLines['stations']
 function getLinesRoutesSchedule() 
 {
     global $routes, $linesTravelTime, $transportLines;
