@@ -283,62 +283,78 @@ function updateTrainsPositions()
                 const nextStationInfo = routeSchedule[stationPointIndex + 1];
                 const nextStationID = lines[leneID]["stations"][nextStationInfo["lineStationIndex"]];
 
-                if (currentStationID != nextStationID)
+                var routeArrow = routesArrowSVG[routeID];
+                if (routeArrow == undefined)
                 {
-                    var routeArrow = routesArrowSVG[routeID];
-                    if (routeArrow == undefined)
-                    {
-                        routeArrow = arrowSvgElement.cloneNode(true);
-                        svgElement.appendChild(routeArrow);
+                    routeArrow = arrowSvgElement.cloneNode(true);
+                    svgElement.appendChild(routeArrow);
 
-                        routesArrowSVG[routeID] = routeArrow;
-                    }
-
-                    const startStationBBox = Geometry.getSVGElementRect(svgElement, currentStationID);
-                    const endStationBBox = Geometry.getSVGElementRect(svgElement, nextStationID);
-                    const arrowSvgBBox = new Geometry.Rect(routeArrow.getBBox());
-                
-                    if (!startStationBBox || !endStationBBox || !arrowSvgBBox)
-                    {
-                        console.log("Unable to calculate train position");
-                        return 
-                    }
-                    
-                    const startStationCenter = startStationBBox.getCenter();
-                    const endStationCenter = endStationBBox.getCenter();
-                    const arrowCenter = arrowSvgBBox.getCenter();
-                
-                    
-                    const moveVector = endStationCenter.subtract(startStationCenter);
-                    const arrowAngle = Math.atan2(moveVector.y, moveVector.x)  * (180 / Math.PI)
-                    
-                    const arrowDiffStart = startStationCenter.subtract(arrowCenter);
-
-                    // Трансформация чтобы чтобы поставить Arrow на текущую станцию в нужном направлении
-                    var startStationTransform = `rotate(${arrowAngle}, ${startStationCenter.x}, ${startStationCenter.y}) translate(${arrowDiffStart.x}, ${arrowDiffStart.y})`;
-                    
-                    if (currentSeconds > currentStationInfo.departure)
-                    {
-                        const tripSeconds = nextStationInfo.arrival - currentStationInfo.departure;
-                        const movingSeconds =  currentSeconds - currentStationInfo.departure;
-                        const tripFraction = movingSeconds / tripSeconds;
-
-                        var movingTransform = `translate(${tripFraction * moveVector.x}, ${tripFraction * moveVector.y})`;
-
-                        startStationTransform = `${movingTransform} ${startStationTransform}`;
-                    }
-
-                    routeArrow.setAttribute('transform', startStationTransform);
-                
-                    routeArrow.style.visibility = 'visible';
+                    routesArrowSVG[routeID] = routeArrow;
                 }
+
+                const startStationBBox = Geometry.getSVGElementRect(svgElement, currentStationID);
+                const endStationBBox = Geometry.getSVGElementRect(svgElement, nextStationID);
+                const arrowSvgBBox = new Geometry.Rect(routeArrow.getBBox());
+            
+                if (!startStationBBox || !endStationBBox || !arrowSvgBBox)
+                {
+                    console.log("Unable to calculate train position");
+                    return 
+                }
+                
+                const startStationCenter = startStationBBox.getCenter();
+                const endStationCenter = endStationBBox.getCenter();
+                const arrowCenter = arrowSvgBBox.getCenter();
+            
+                
+                var moveVector = endStationCenter.subtract(startStationCenter);
+
+                if (currentStationID == nextStationID)
+                {
+                    if (stationPointIndex > 0)
+                    {
+                        const prevStationInfo = routeSchedule[stationPointIndex - 1];
+                        const prevStationID = lines[leneID]["stations"][prevStationInfo["lineStationIndex"]];
+
+                        const prevStationCenter = Geometry.getSVGElementRect(svgElement, prevStationID).getCenter();
+
+                        moveVector = startStationCenter.subtract(prevStationCenter);
+                        if (currentStationInfo.departure < currentSeconds)
+                        {
+                            const rotateFraction = (currentSeconds - currentStationInfo.departure) / (nextStationInfo.arrival - currentStationInfo.departure);
+                            moveVector = moveVector.rotateVector( 180 * rotateFraction);
+                        }
+                    }
+                }
+
+                const arrowAngle = Math.atan2(moveVector.y, moveVector.x)  * (180 / Math.PI)
+
+                const arrowDiffStart = startStationCenter.subtract(arrowCenter);
+
+                // Трансформация чтобы чтобы поставить Arrow на текущую станцию в нужном направлении
+                var startStationTransform = `rotate(${arrowAngle}, ${startStationCenter.x}, ${startStationCenter.y}) translate(${arrowDiffStart.x}, ${arrowDiffStart.y})`;
+                
+                if (currentSeconds > currentStationInfo.departure && currentStationID != nextStationID)
+                {
+                    const tripSeconds = nextStationInfo.arrival - currentStationInfo.departure;
+                    const movingSeconds =  currentSeconds - currentStationInfo.departure;
+                    const tripFraction = movingSeconds / tripSeconds;
+
+                    var movingTransform = `translate(${tripFraction * moveVector.x}, ${tripFraction * moveVector.y})`;
+
+                    startStationTransform = `${movingTransform} ${startStationTransform}`;
+                }
+
+                routeArrow.setAttribute('transform', startStationTransform);
+            
+                routeArrow.style.visibility = 'visible';
             });
         });
     }
 
-    currentSeconds += 10;
+    currentSeconds += 2;
 
-    setTimeout(updateTrainsPositions, 1000);
+    setTimeout(updateTrainsPositions, 100);
 }
 
 function loadSchemaImage()

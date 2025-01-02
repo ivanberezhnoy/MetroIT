@@ -19,6 +19,17 @@ export default class Point
       }
       throw new Error('Argument must be an instance of Point');
     }    
+
+    rotateVector(degrees)
+    {
+      const radians = degrees * (Math.PI / 180);
+
+      // Применяем матрицу поворота
+      const xNew = this.x * Math.cos(radians) - this.y * Math.sin(radians);
+      const yNew = this.x * Math.sin(radians) + this.y * Math.cos(radians);
+
+      return new Point(xNew, yNew);
+    }
  }
 
  export class Rect {
