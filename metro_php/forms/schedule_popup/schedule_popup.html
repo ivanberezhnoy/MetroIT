@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Расписание метро</title>
+    <link rel="stylesheet" href="./forms/schedule_popup/css/schedule_popup.css">
+</head>
+<body>
+<script type="module" src="./forms/schedule_popup/script/schedule_popup.js"></script>
+<!-- Попап форма -->
+<div class="popup" id="popup">
+    <div class="popup-content">
+        <h2>Станция 'Южный вокзал'</h2>
+
+        <!-- Выбор даты -->
+        <label for="scheduleDate">Дата расписания</label>
+        <input type="date" id="scheduleDate" name="scheduleDate">
+
+        <!-- Таблица расписания -->
+        <table>
+            <thead>
+                <tr>
+                    <th>на Холодную Гору</th>
+                    <th>на Центральный рынок</th>
+                </tr>
+            </thead>
+            <tbody id="scheduleTableBody">
+                <tr>
+                    <td>10:01:00</td>
+                    <td>10:03:20</td>
+                </tr>
+                <tr>
+                    <td>10:01:10</td>
+                    <td>10:03:30</td>
+                </tr>
+                <tr>
+                    <td>10:02:25</td>
+                    <td>10:05:50</td>
+                </tr>
+                <tr>
+                    <td>10:11:01</td>
+                    <td>10:09:00</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Кнопка закрытия попапа -->
+        <button class="close-popup-btn" id="closePopupBtn">Закрыть</button>
+    </div>
+</div>
+
+<script>
+
+</script>
+
+</body>
+</html>

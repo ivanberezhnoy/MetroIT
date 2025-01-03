@@ -288,8 +288,8 @@ function updateTrainsPositions()
                     routesArrowSVG[routeID] = routeArrow;
                 }
 
-                const startStationBBox = SVG.getSVGElementRect(svgElement, currentStationID);
-                const endStationBBox = SVG.getSVGElementRect(svgElement, nextStationID);
+                const startStationBBox = SVG.getSVGElementRect(svgElement, SVG.getStationPointID(currentStationID));
+                const endStationBBox = SVG.getSVGElementRect(svgElement, SVG.getStationPointID(nextStationID));
                 const arrowSvgBBox = new Geometry.Rect(routeArrow.getBBox());
             
                 if (!startStationBBox || !endStationBBox || !arrowSvgBBox)
@@ -312,7 +312,7 @@ function updateTrainsPositions()
                         const prevStationInfo = routeSchedule[stationPointIndex - 1];
                         const prevStationID = lines[leneID]["stations"][prevStationInfo["lineStationIndex"]];
 
-                        const prevStationCenter = SVG.getSVGElementRect(svgElement, prevStationID).getCenter();
+                        const prevStationCenter = SVG.getSVGElementRect(svgElement, SVG.getStationPointID(prevStationID)).getCenter();
 
                         moveVector = startStationCenter.subtract(prevStationCenter);
                         if (currentStationInfo.departure < currentSeconds)
@@ -359,6 +359,59 @@ function updateTrainsPositions()
     setTimeout(updateTrainsPositions, 100);
 }
 
+function clearElementFill(element)
+{
+    element.style.fill = "none";
+}
+
+function closePopup()
+{
+    var popupContainter = document.getElementById("popupDisplay");
+    popupContainter.innerHTML = "";
+    popupContainter.style.display = "none";    
+}
+
+function handleStationClick(stationID)
+{
+    const stationClickZone = svgElement.getElementById(SVG.getStationClickZoneID(stationID));
+
+    stationClickZone.style.fill = "#D3D3D3";
+
+    setTimeout(clearElementFill, 100, stationClickZone);
+
+
+    fetch("./forms/schedule_popup/schedule_popup.html")
+        .then(response => response.text())
+        .then(html => 
+        {
+            
+            const popupDisplay = document.getElementById("popupDisplay");
+
+            let shadowRoot = popupDisplay.shadowRoot;
+            if (!shadowRoot) {
+              // Если shadowRoot не существует, создаем его
+              shadowRoot = popupDisplay.attachShadow({ mode: 'open' });
+            }
+
+            shadowRoot.innerHTML = html; // Вставляем содержимое
+            popupDisplay.style.display = "block";
+
+            shadowRoot.getElementById("closePopupBtn").addEventListener("click", closePopup);
+        
+            // Удаляем предыдущие скрипты
+            const existingScripts = document.querySelectorAll("#popupDisplay script");
+            existingScripts.forEach(script => script.remove());
+        
+            // Выполняем новые скрипты
+            const newScripts = popupDisplay.querySelectorAll("script");
+            newScripts.forEach(script => {
+              const newScript = document.createElement("script");
+              newScript.textContent = script.textContent;
+              document.body.appendChild(newScript);
+            });            
+        });
+}
+
 function handleSchemaClick(event)
 {
     const clickPoint = new Geometry.Point(event.pageX, event.pageY);
@@ -369,12 +422,10 @@ function handleSchemaClick(event)
         return;
     }
 
-    console.log(`Click point (${clickPoint.x}, ${clickPoint.y})`);
-
     let clickStationID;
     Object.keys(stations).forEach((stationID) => 
     {
-        const stationRect = SVG.getSVGElementDocumentRect(svgElement, `ClickZone-Station-${stationID}`, false);
+        const stationRect = SVG.getSVGElementDocumentRect(svgElement, SVG.getStationClickZoneID(stationID), false);
 
         if (stationRect != null && stationRect.contains(clickPoint))
         {
@@ -385,7 +436,7 @@ function handleSchemaClick(event)
 
     if (clickStationID)
     {
-        console.log(`Click on station with ID: ${clickStationID}`);
+        handleStationClick(clickStationID);
     }
 }
 

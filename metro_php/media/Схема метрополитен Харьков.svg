@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <g id="Klick_zone_HG" data-name="Klick zone HG">
+    <polygon id="ClickZone-Station-13" data-name="Holodna gora" points="89.321 458.386 227.47 457.75 227.47 427.619 52.786 427.619 52.786 457.75 52.786 476.338 89.066 476.338 89.321 458.386" style="fill: none;"/>
+    <polygon id="ClickZone-Station-12" points="146.946 484.508 251.219 483.873 251.219 463.17 110.41 463.17 110.41 493.302 110.41 511.889 146.691 511.889 146.946 484.508" style="fill: none;"/>
+    <polygon id="ClickZone-Station-11" data-name="Centr rynok" points="207.563 529.375 311.836 530.169 311.836 489.021 171.028 489.021 171.028 527.985 171.028 546.572 207.308 546.572 207.563 529.375" style="fill: none;"/>
+    <polygon id="ClickZone-Station-10" data-name="Maidan Konstitucii" points="386.207 576.693 386.207 536.603 237.858 536.603 237.858 554.91 237.858 576.693 386.207 576.693" style="fill: none;"/>
+    <polygon id="ClickZone-Station-9" points="340.932 627.875 340.932 587.784 302.477 587.784 302.477 606.142 232.247 606.092 232.247 607.829 232.247 627.875 340.932 627.875" style="fill: none;"/>
+    <polygon id="ClickZone-Station-8" points="439.498 661.974 557.686 662.353 557.689 650.928 557.689 637.085 412.957 637.085 412.957 655.412 412.957 680.113 438.927 680.113 439.498 661.974" style="fill: none;"/>
+    <polygon id="ClickZone-Station-7" points="506.566 698.035 614.733 698.438 614.736 686.289 614.736 671.569 470.004 671.569 470.004 691.057 470.004 717.324 506.566 717.324 506.566 698.035" style="fill: none;"/>
+    <polygon id="ClickZone-Station-6" points="564.933 731.872 673.1 732.275 673.103 720.126 673.103 705.406 528.371 705.406 528.371 724.894 528.371 751.161 564.933 751.161 564.933 731.872" style="fill: none;"/>
+    <polygon id="ClickZone-Station-5" data-name="Palac sportu" points="622.965 765.474 765.688 765.877 765.692 753.728 765.692 739.008 585.699 739.008 585.699 758.497 585.699 784.764 622.965 784.764 622.965 765.474" style="fill: none;"/>
+    <polygon id="ClickZone-Station-4" points="681.268 797.738 789.138 797.279 789.14 788.397 789.14 773.677 644.104 773.677 644.104 793.166 644.104 819.433 680.761 819.433 681.268 797.738" style="fill: none;"/>
+    <polygon id="ClickZone-Station-3" points="739.455 826.816 959.865 827.321 959.869 820.56 959.869 805.84 702.567 805.84 702.567 825.329 702.567 851.596 739.455 851.596 739.455 826.816" style="fill: none;"/>
+    <polygon id="ClickZone-Station-2" data-name="Traktoryi zavod" points="798.342 860.226 977.311 860.763 977.316 837.932 761.453 837.932 761.453 858.646 761.453 886.564 798.342 886.564 798.342 860.226" style="fill: none;"/>
+    <polygon id="ClickZone-Station-1" data-name="Traktoryi zavod" points="856.132 893.205 995.793 893.742 995.797 870.911 819.244 870.911 819.244 891.624 819.244 919.543 856.132 919.543 856.132 893.205" style="fill: none;"/>
+    <path d="M583.112,128.336l31.895-11.199c1.106-.388,1.106-1.952,0-2.34l-32.027-11.255c-.992-.349-1.941.618-1.573,1.604l3.867,10.365c.103.275.104.578.005.854l-3.744,10.38c-.355.983.591,1.937,1.578,1.591ZM589.081,111.068c-.13-.35.206-.693.558-.569l14.339,5.039c.392.138.392.692,0,.83l-14.279,5.014c-.35.123-.685-.216-.56-.564l1.759-4.878-1.818-4.872Z" style="fill: #231f20; stroke: #231f20; stroke-miterlimit: 10; stroke-width: .25px;" id="arrow"/>
+  </g>  
   <g id="Layer_2" data-name="Layer 2">
     <polygon points="410.413 640.32 397.154 639.265 436.991 131.149 450.25 132.204 410.413 640.32" style="fill: #43b872; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 2px;"/>
     <polygon points="843.137 896.711 836.531 908.338 64.722 463.515 71.328 451.888 843.137 896.711" style="fill: #f04f48; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 2px;"/>
@@ -11,19 +27,19 @@
     <ellipse cx="558.395" cy="379.226" rx="16.465" ry="16.583" style="fill: #5478bb; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
     <ellipse cx="502.089" cy="412.392" rx="16.465" ry="16.583" style="fill: #5478bb; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
     <ellipse cx="400.662" cy="470.947" rx="16.465" ry="16.583" style="fill: #5478bb; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
-    <ellipse id="13" data-name="13" cx="71.021" cy="458.386" rx="16.465" ry="16.583" style="fill: #f04f48; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
-    <ellipse id="12" data-name="12" cx="128.97" cy="492.827" rx="16.465" ry="16.583" style="fill: #f04f48; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
-    <ellipse id="11" data-name="11" cx="188.97" cy="527.407" rx="16.465" ry="16.583" style="fill: #f04f48; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
-    <ellipse id="10" data-name="10" cx="261.293" cy="570.082" rx="16.465" ry="16.583" style="fill: #f04f48; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
-    <ellipse id="9" data-name="9" cx="324.017" cy="605.24" rx="16.465" ry="16.583" style="fill: #f04f48; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
-    <ellipse id="8" data-name="8" cx="420.717" cy="660.972" rx="16.465" ry="16.583" style="fill: #f04f48; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
-    <ellipse id="7" data-name="7" cx="487.682" cy="699.566" rx="16.465" ry="16.583" style="fill: #f04f48; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
-    <ellipse id="6" data-name="6" cx="546.294" cy="733.346" rx="16.465" ry="16.583" style="fill: #f04f48; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
-    <ellipse id="5" data-name="5" cx="604.046" cy="766.632" rx="16.465" ry="16.583" style="fill: #f04f48; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
-    <ellipse id="4" data-name="4" cx="662.945" cy="800.577" rx="16.465" ry="16.583" style="fill: #f04f48; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
-    <ellipse id="3" data-name="&amp;quot;3&amp;quot;" cx="720.698" cy="833.862" rx="16.465" ry="16.583" style="fill: #f04f48; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
-    <ellipse id="2" data-name="&amp;quot;2&amp;quot;" cx="780.24" cy="868.179" rx="16.465" ry="16.583" style="fill: #f04f48; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
-    <ellipse id="1" data-name="&amp;quot;1&amp;quot;" cx="837.731" cy="901.313" rx="16.465" ry="16.583" style="fill: #f04f48; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
+    <ellipse id="Station-Point-13" data-name="13" cx="71.021" cy="458.386" rx="16.465" ry="16.583" style="fill: #f04f48; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
+    <ellipse id="Station-Point-12" data-name="12" cx="128.97" cy="492.827" rx="16.465" ry="16.583" style="fill: #f04f48; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
+    <ellipse id="Station-Point-11" data-name="11" cx="188.97" cy="527.407" rx="16.465" ry="16.583" style="fill: #f04f48; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
+    <ellipse id="Station-Point-10" data-name="10" cx="261.293" cy="570.082" rx="16.465" ry="16.583" style="fill: #f04f48; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
+    <ellipse id="Station-Point-9" data-name="9" cx="324.017" cy="605.24" rx="16.465" ry="16.583" style="fill: #f04f48; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
+    <ellipse id="Station-Point-8" data-name="8" cx="420.717" cy="660.972" rx="16.465" ry="16.583" style="fill: #f04f48; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
+    <ellipse id="Station-Point-7" data-name="7" cx="487.682" cy="699.566" rx="16.465" ry="16.583" style="fill: #f04f48; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
+    <ellipse id="Station-Point-6" data-name="6" cx="546.294" cy="733.346" rx="16.465" ry="16.583" style="fill: #f04f48; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
+    <ellipse id="Station-Point-5" data-name="5" cx="604.046" cy="766.632" rx="16.465" ry="16.583" style="fill: #f04f48; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
+    <ellipse id="Station-Point-4" data-name="4" cx="662.945" cy="800.577" rx="16.465" ry="16.583" style="fill: #f04f48; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
+    <ellipse id="Station-Point-3" data-name="&amp;quot;3&amp;quot;" cx="720.698" cy="833.862" rx="16.465" ry="16.583" style="fill: #f04f48; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
+    <ellipse id="Station-Point-2" data-name="&amp;quot;2&amp;quot;" cx="780.24" cy="868.179" rx="16.465" ry="16.583" style="fill: #f04f48; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
+    <ellipse id="Station-Point-1" data-name="&amp;quot;1&amp;quot;" cx="837.731" cy="901.313" rx="16.465" ry="16.583" style="fill: #f04f48; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
     <ellipse cx="402.927" cy="650.719" rx="16.465" ry="16.583" style="fill: #43b872; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
     <ellipse cx="407.378" cy="593.942" rx="16.465" ry="16.583" style="fill: #43b872; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
     <ellipse cx="413.173" cy="527.407" rx="16.465" ry="16.583" style="fill: #43b872; stroke: #231f20; stroke-miterlimit: 10; stroke-width: 3px;"/>
@@ -480,21 +496,5 @@
     <polygon id="Student" points="752.425 295.373 715.896 295.373 715.587 274.721 586.018 274.721 586.018 251.662 752.425 251.662 752.425 295.373" style="fill: none;"/>
     <polygon id="Saltivska" points="808.997 263.108 772.51 263.332 772.51 237.394 658.604 237.394 658.604 216.759 808.997 216.759 808.997 263.108" style="fill: none;"/>
     <polygon id="Baraban" points="634.869 363.394 599.294 363.963 599.294 354.168 473.652 354.168 473.652 303.324 634.869 303.324 634.869 363.394" style="fill: none;"/>
-  </g>
-  <g id="Klick_zone_HG" data-name="Klick zone HG">
-    <polygon id="ClickZone-Station-13" data-name="Holodna gora" points="89.321 458.386 227.47 457.75 227.47 427.619 52.786 427.619 52.786 457.75 52.786 476.338 89.066 476.338 89.321 458.386" style="fill: none;"/>
-    <polygon id="ClickZone-Station-12" points="146.946 484.508 251.219 483.873 251.219 463.17 110.41 463.17 110.41 493.302 110.41 511.889 146.691 511.889 146.946 484.508" style="fill: none;"/>
-    <polygon id="ClickZone-Station-11" data-name="Centr rynok" points="207.563 529.375 311.836 530.169 311.836 489.021 171.028 489.021 171.028 527.985 171.028 546.572 207.308 546.572 207.563 529.375" style="fill: none;"/>
-    <polygon id="ClickZone-Station-10" data-name="Maidan Konstitucii" points="386.207 576.693 386.207 536.603 237.858 536.603 237.858 554.91 237.858 576.693 386.207 576.693" style="fill: none;"/>
-    <polygon id="ClickZone-Station-9" points="340.932 627.875 340.932 587.784 302.477 587.784 302.477 606.142 232.247 606.092 232.247 607.829 232.247 627.875 340.932 627.875" style="fill: none;"/>
-    <polygon id="ClickZone-Station-8" points="439.498 661.974 557.686 662.353 557.689 650.928 557.689 637.085 412.957 637.085 412.957 655.412 412.957 680.113 438.927 680.113 439.498 661.974" style="fill: none;"/>
-    <polygon id="ClickZone-Station-7" points="506.566 698.035 614.733 698.438 614.736 686.289 614.736 671.569 470.004 671.569 470.004 691.057 470.004 717.324 506.566 717.324 506.566 698.035" style="fill: none;"/>
-    <polygon id="ClickZone-Station-6" points="564.933 731.872 673.1 732.275 673.103 720.126 673.103 705.406 528.371 705.406 528.371 724.894 528.371 751.161 564.933 751.161 564.933 731.872" style="fill: none;"/>
-    <polygon id="ClickZone-Station-5" data-name="Palac sportu" points="622.965 765.474 765.688 765.877 765.692 753.728 765.692 739.008 585.699 739.008 585.699 758.497 585.699 784.764 622.965 784.764 622.965 765.474" style="fill: none;"/>
-    <polygon id="ClickZone-Station-4" points="681.268 797.738 789.138 797.279 789.14 788.397 789.14 773.677 644.104 773.677 644.104 793.166 644.104 819.433 680.761 819.433 681.268 797.738" style="fill: none;"/>
-    <polygon id="ClickZone-Station-3" points="739.455 826.816 959.865 827.321 959.869 820.56 959.869 805.84 702.567 805.84 702.567 825.329 702.567 851.596 739.455 851.596 739.455 826.816" style="fill: none;"/>
-    <polygon id="ClickZone-Station-2" data-name="Traktoryi zavod" points="798.342 860.226 977.311 860.763 977.316 837.932 761.453 837.932 761.453 858.646 761.453 886.564 798.342 886.564 798.342 860.226" style="fill: none;"/>
-    <polygon id="ClickZone-Station-1" data-name="Traktoryi zavod" points="856.132 893.205 995.793 893.742 995.797 870.911 819.244 870.911 819.244 891.624 819.244 919.543 856.132 919.543 856.132 893.205" style="fill: none;"/>
-    <path d="M583.112,128.336l31.895-11.199c1.106-.388,1.106-1.952,0-2.34l-32.027-11.255c-.992-.349-1.941.618-1.573,1.604l3.867,10.365c.103.275.104.578.005.854l-3.744,10.38c-.355.983.591,1.937,1.578,1.591ZM589.081,111.068c-.13-.35.206-.693.558-.569l14.339,5.039c.392.138.392.692,0,.83l-14.279,5.014c-.35.123-.685-.216-.56-.564l1.759-4.878-1.818-4.872Z" style="fill: #231f20; stroke: #231f20; stroke-miterlimit: 10; stroke-width: .25px;" id="arrow"/>
   </g>
 </svg>

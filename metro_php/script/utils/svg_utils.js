@@ -33,3 +33,14 @@ export function getSVGElementDocumentRect(parent, elementID, logError = true)
 
   return result.moveToVector(new Geometry.Point(window.scrollX, window.scrollY));
 }
+
+
+export function getStationPointID(stationID)
+{
+    return `Station-Point-${stationID}`;
+}
+
+export function getStationClickZoneID(stationID)
+{
+    return `ClickZone-Station-${stationID}`;
+}
