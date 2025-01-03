@@ -8,6 +8,7 @@ define('SECONDS_IN_HOUR', SECONDS_IN_MINUTE * MINUTES_IN_HOUR);
 $eveningStartTime = 20 * SECONDS_IN_HOUR; // Время перехода на вечерний график
 $defaultStationWait = 20; // Время ожидания на станции
 $defaultStartStationWait = $defaultStationWait; // Время ожидания на начальной станции
+$defaultStartRouteWait = $defaultStationWait * 3; // Врямя ожидания на старте машрута
 $additionalTransferStationWait = 10; // Дополнительное время ожидания на пересадочных станциях
 $defaultRoundtripDayTime = 300; // Время оборота в дневной период
 $defaultRoundtripEveningTime = 600; // Время оборота в вечерний период

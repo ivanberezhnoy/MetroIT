@@ -254,7 +254,7 @@ function updateTrainsPositions()
                 }
 
                 // Route is not started yet
-                if (stationPointIndex == 0 && routeSchedule[stationPointIndex].departure > currentSeconds)
+                if (stationPointIndex == 0 && routeSchedule[stationPointIndex].arrival > currentSeconds)
                 {
                     return;
                 }
@@ -581,7 +581,7 @@ var arrowSvgElement = null;
 var routesArrowSVG = {};
 var svgElement = null;
 
-var currentSeconds = Utils.secondsInHour * 5 + Utils.secondInMinute * 29;
+var currentSeconds = Utils.secondsInHour * 5 + Utils.secondInMinute * 45 + 0;
 
 const selectedLineID = 1;
 var lines = null;

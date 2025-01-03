@@ -21,7 +21,7 @@ function isDepartureFromStartStation($stationIndex, $currentDirection, $maxStati
 
 function addStationPoint($lineID, &$infoArray, $routeID, $routeInfo, $stationIndex, $departureTime, $currentDirection, $maxStationIndex)
 {
-    global $stations, $defaultStationWait, $defaultStartStationWait, $additionalTransferStationWait, 
+    global $stations, $defaultStationWait, $defaultStartStationWait, $additionalTransferStationWait, $defaultStartRouteWait,
         $routeTimesFixing, $maxTimeLimit, $transportLines;
 
     $stationInfo = $stations[$transportLines[$lineID]["stations"][$stationIndex]];
@@ -30,8 +30,17 @@ function addStationPoint($lineID, &$infoArray, $routeID, $routeInfo, $stationInd
     $arrivalTime = 0;
 
     // Calculate arrival time
-    if (isArrivalFinalStation($stationIndex, $currentDirection, $maxStationIndex) ||
-            isDepartureFromStartStation($stationIndex, $currentDirection, $maxStationIndex))
+    if (isDepartureFromStartStation($stationIndex, $currentDirection, $maxStationIndex))
+    {
+        $arrivalTime = $departureTime - $defaultStartStationWait;
+
+        // Route begins
+        if (count($infoArray) == 0)
+        {
+            $arrivalTime = $departureTime - $defaultStartRouteWait;
+        }        
+    }
+    else if (isArrivalFinalStation($stationIndex, $currentDirection, $maxStationIndex))
     {
         $arrivalTime = $departureTime - $defaultStartStationWait;
     }
@@ -75,20 +84,17 @@ function addStationPoint($lineID, &$infoArray, $routeID, $routeInfo, $stationInd
         }
     }
 
-    // Check is schedule start or finish
-    if ($routeInfo["startTime"] < $departureTime)
+    $info["arrival"] = $arrivalTime;
+    
+    if (array_key_exists("finalTime", $routeInfo))
     {
-        $info["arrival"] = $arrivalTime;
-
-        if (array_key_exists("finalTime", $routeInfo))
+        if ($arrivalTime >= $routeInfo["finalTime"])
         {
-            if ($arrivalTime >= $routeInfo["finalTime"])
-            {
-                $info["landingProhibited"] = true;
-            }
+            $info["landingProhibited"] = true;
         }
     }
-
+    
+    // Check is schedule finished
     if ($arrivalTime < $routeInfo["endTime"])
     {
         $info["departure"] = $departureTime;
