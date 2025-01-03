@@ -28,3 +28,17 @@ export function formatTime(time)
 
     return formatTimeVal(hours) + ':' + formatTimeVal(minutes) + ':' + formatTimeVal(seconds);
 }
+
+export function isToday(date) 
+{
+    const today = new Date();
+    
+    return date.getFullYear() === today.getFullYear() &&
+           date.getMonth() === today.getMonth() &&
+           date.getDate() === today.getDate();
+}
+
+export function getDateSeconds(date)
+{
+    return date.getHours() * secondsInHour + date.getMinutes() * secondInMinute + date.getSeconds();
+}

@@ -59,11 +59,6 @@ label {
     display: inline-block;
 }        
 
-span[name="timeDescription"] 
-{
-    font-size: 12px; /* Устанавливаем размер шрифта */
-    font-weight: normal; /* Убираем жирность */
-}        
 /* Стиль для input типа date */
 input[type="date"] 
 {

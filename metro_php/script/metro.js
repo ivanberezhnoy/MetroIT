@@ -3,6 +3,7 @@ import * as UIUTils from './utils/ui_utils.js';
 import * as API from './api.js';
 import * as Geometry from "./utils/Geometry.js"
 import * as SVG from "./utils/svg_utils.js"
+import * as SchedulePopup from "../forms/schedule_popup/script/schedule_popup.js"
 
 function loadRoutes()
 {
@@ -220,6 +221,8 @@ function handlePageSelection()
 
 function updateTrainsPositions()
 {
+    currentSeconds = Utils.getDateSeconds(new Date());
+
     if (svgElement == null)
     {
         console.log("Unable to find schema SVG");
@@ -241,7 +244,7 @@ function updateTrainsPositions()
                 const stationPointCount = Object.keys(routeSchedule).length;
                 var stationPointIndex = 0;
 
-                for (; stationPointIndex + 1 < stationPointCount; ++stationPointIndex)
+                for (; stationPointIndex + 2 < stationPointCount; ++stationPointIndex)
                 {
                     var nextStationPointInfo = routeSchedule[stationPointIndex + 1];
                     if (nextStationPointInfo.arrival != undefined && currentSeconds < nextStationPointInfo.arrival)
@@ -305,6 +308,7 @@ function updateTrainsPositions()
                 
                 var moveVector = endStationCenter.subtract(startStationCenter);
 
+                //Разворот на конечной станции
                 if (currentStationID == nextStationID)
                 {
                     if (stationPointIndex > 0)
@@ -408,7 +412,9 @@ function handleStationClick(stationID)
               const newScript = document.createElement("script");
               newScript.textContent = script.textContent;
               document.body.appendChild(newScript);
-            });            
+            });   
+            
+            SchedulePopup.loadDateStationSchedule(shadowRoot, stationID, schedule, new Date(), lines, stations);
         });
 }
 
