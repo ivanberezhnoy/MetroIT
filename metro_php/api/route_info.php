@@ -75,10 +75,18 @@ function addStationPoint($lineID, &$infoArray, $routeID, $routeInfo, $stationInd
         }
     }
 
-    // Check is is schedule start or finish
+    // Check is schedule start or finish
     if ($routeInfo["startTime"] < $departureTime)
     {
         $info["arrival"] = $arrivalTime;
+
+        if (array_key_exists("finalTime", $routeInfo))
+        {
+            if ($arrivalTime >= "finalTime")
+            {
+                $info["landingProhibited"] = true;
+            }
+        }
     }
 
     if ($arrivalTime < $routeInfo["endTime"])

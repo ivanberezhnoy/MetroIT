@@ -221,7 +221,7 @@ function handlePageSelection()
 
 function updateTrainsPositions()
 {
-    currentSeconds = Utils.getDateSeconds(new Date());
+    //currentSeconds = Utils.getDateSeconds(new Date());
 
     if (svgElement == null)
     {
@@ -334,6 +334,8 @@ function updateTrainsPositions()
                 // Трансформация чтобы чтобы поставить Arrow на текущую станцию в нужном направлении
                 var startStationTransform = `rotate(${arrowAngle}, ${startStationCenter.x}, ${startStationCenter.y}) translate(${arrowDiffStart.x}, ${arrowDiffStart.y})`;
                 
+                const landingProhibited = currentStationInfo.landingProhibited;
+
                 if (currentSeconds > currentStationInfo.departure && currentStationID != nextStationID)
                 {
                     const tripSeconds = nextStationInfo.arrival - currentStationInfo.departure;
@@ -344,11 +346,19 @@ function updateTrainsPositions()
 
                     startStationTransform = `${movingTransform} ${startStationTransform}`;
 
-                    routeArrow.style.fill = "#231f20";
+                    if (!landingProhibited)
+                    {
+                        routeArrow.style.fill = "#231f20";
+                    }
                 }
-                else if (currentStationID != nextStationID)
+                else if (currentStationID != nextStationID && !landingProhibited)
                 {
                     routeArrow.style.fill = "#23ff20";
+                }
+
+                if (landingProhibited)
+                {
+                    routeArrow.style.fill = "#5e5e5e";
                 }
 
                 routeArrow.setAttribute('transform', startStationTransform);
@@ -357,6 +367,8 @@ function updateTrainsPositions()
             });
         });
     }
+
+    document.getElementById("currentTime").innerText = `Поточний час: ${Utils.formatTime(currentSeconds)}`;
 
     currentSeconds += 2;
 
@@ -561,7 +573,7 @@ var arrowSvgElement = null;
 var routesArrowSVG = {};
 var svgElement = null;
 
-var currentSeconds = Utils.secondsInHour * 16 + Utils.secondInMinute * 20 + 35;
+var currentSeconds = Utils.secondsInHour * 22 + Utils.secondInMinute * 0 + 40;
 
 const selectedLineID = 1;
 var lines = null;

@@ -65,6 +65,11 @@ export function loadDateStationSchedule(popupRootShadow, stationID, targetSchedu
                     continue;
                 }
 
+                if (currentStationPointInfo.landingProhibited)
+                {
+                    continue;
+                }
+
                 if (!currentStationPointInfo.departure)
                 {
                     console.log(`loadDateStationSchedule: Invalid station point. LineID: ${lineID}, routeID: ${routeID}, stationPointIndex: ${currentStationPoint}, stationPoint: ${currentStationPointInfo}`);
@@ -149,7 +154,7 @@ export function loadDateStationSchedule(popupRootShadow, stationID, targetSchedu
     const reverseStationPointsCount = Object.keys(stationPointsReverse).length;
 
     console.log(`stationID: ${stationID}, nextStationID: ${nextStationID}, previousStationID: ${previousStationID}`);
-    const hasDirectStationPoints = directStationPointsCount > 0 && nextStationID && nextStationID < lineStationsCount;
+    const hasDirectStationPoints = directStationPointsCount > 0 && nextStationID && nextStationID <= lineStationsCount;
     if (hasDirectStationPoints)
     {
         let directStationHeader = document.createElement('td');
