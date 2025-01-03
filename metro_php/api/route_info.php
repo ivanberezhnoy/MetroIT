@@ -82,7 +82,7 @@ function addStationPoint($lineID, &$infoArray, $routeID, $routeInfo, $stationInd
 
         if (array_key_exists("finalTime", $routeInfo))
         {
-            if ($arrivalTime >= "finalTime")
+            if ($arrivalTime >= $routeInfo["finalTime"])
             {
                 $info["landingProhibited"] = true;
             }

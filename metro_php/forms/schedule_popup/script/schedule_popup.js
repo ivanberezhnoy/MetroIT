@@ -18,6 +18,11 @@ export function loadDateStationSchedule(popupRootShadow, stationID, targetSchedu
     var stationPointsReverse = [];
     var scheduleTime = 0;
 
+    if (popupRootShadow.getElementById("scheduleDate").value != scheduleDate.toISOString().split('T')[0])
+    {
+        popupRootShadow.getElementById("scheduleDate").value = scheduleDate.toISOString().split('T')[0];
+    }    
+
     if (Utils.isToday(scheduleDate))
     {
         scheduleTime = Utils.getDateSeconds(scheduleDate);
@@ -115,17 +120,8 @@ export function loadDateStationSchedule(popupRootShadow, stationID, targetSchedu
 
     popupRootShadow.getElementById("stationName").innerText = `Станція "${stationsInfo[stationID].name}"`;
 
-    if (popupRootShadow.getElementById("scheduleDate").value != scheduleDate.toISOString().split('T')[0])
-    {
-        popupRootShadow.getElementById("scheduleDate").value = scheduleDate.toISOString().split('T')[0];
-    }
-
-    
-
     var previousStationID;
     var nextStationID;
-
-    const keys = Object.keys(lineStations);
 
     Object.entries(lineStations).forEach(([lineStationIndex, lineStationID]) =>
     {

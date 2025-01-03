@@ -254,7 +254,7 @@ function updateTrainsPositions()
                 }
 
                 // Route is not started yet
-                if (stationPointIndex == 0 && routeSchedule[stationPointIndex].departute > currentSeconds)
+                if (stationPointIndex == 0 && routeSchedule[stationPointIndex].departure > currentSeconds)
                 {
                     return;
                 }
@@ -266,11 +266,10 @@ function updateTrainsPositions()
                     
                     if (routeArrow != undefined)
                     {
-                        svgElement.parentNode.removeChild(svgElement);
+                        svgElement.removeChild(routeArrow);
 
-                        delete routesArrowSVG.routeID;
+                        delete routesArrowSVG[routeID];
                     }
-
 
                     return;
                 }
@@ -286,6 +285,12 @@ function updateTrainsPositions()
                 if (routeArrow == undefined)
                 {
                     routeArrow = arrowSvgElement.cloneNode(true);
+
+                    if (routeArrow == null || routeArrow == undefined)
+                    {
+                        console.log('Unable to create arrow SVG');
+                    }
+
                     svgElement.appendChild(routeArrow);
 
                     routesArrowSVG[routeID] = routeArrow;
@@ -426,7 +431,10 @@ function handleStationClick(stationID)
               document.body.appendChild(newScript);
             });   
             
-            SchedulePopup.loadDateStationSchedule(shadowRoot, stationID, schedule, new Date(), lines, stations);
+            var sheduleDate = new Date();
+            sheduleDate = Utils.setDateTime(sheduleDate, currentSeconds);
+
+            SchedulePopup.loadDateStationSchedule(shadowRoot, stationID, schedule, sheduleDate, lines, stations);
         });
 }
 
@@ -573,7 +581,7 @@ var arrowSvgElement = null;
 var routesArrowSVG = {};
 var svgElement = null;
 
-var currentSeconds = Utils.secondsInHour * 22 + Utils.secondInMinute * 0 + 40;
+var currentSeconds = Utils.secondsInHour * 5 + Utils.secondInMinute * 29;
 
 const selectedLineID = 1;
 var lines = null;

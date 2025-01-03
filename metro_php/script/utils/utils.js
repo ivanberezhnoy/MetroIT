@@ -20,13 +20,33 @@ function formatTimeVal(timeVal)
     return res;
 }
 
-export function formatTime(time)
+function getHours(seconds)
 {
-    var hours = div(time, secondsInHour);
-    var minutes = div(time % secondsInHour, secondInMinute);
-    var seconds = time - hours * secondsInHour - secondInMinute * minutes;
+    return div(seconds, secondsInHour);
+}
 
-    return formatTimeVal(hours) + ':' + formatTimeVal(minutes) + ':' + formatTimeVal(seconds);
+function getMinutes(seconds)
+{
+    return div(seconds % secondsInHour, secondInMinute);
+}
+
+function getSeconds(seconds)
+{
+    return seconds % secondInMinute;
+}
+
+export function formatTime(seconds)
+{
+    return formatTimeVal(getHours(seconds)) + ':' + formatTimeVal(getMinutes(seconds)) + ':' + formatTimeVal(getSeconds(seconds));
+}
+
+export function setDateTime(date, seconds)
+{
+    date.setHours(getHours(seconds));
+    date.setMinutes(getMinutes(seconds));
+    date.setSeconds(getSeconds(seconds));
+    
+    return date;
 }
 
 export function isToday(date) 
