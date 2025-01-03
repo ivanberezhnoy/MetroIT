@@ -1,4 +1,4 @@
-export default class Point 
+export class Point 
 {
     constructor(x, y) 
     {
@@ -33,14 +33,24 @@ export default class Point
  }
 
  export class Rect {
-    constructor(rect) 
+    constructor(param1, param2, param3, param4) 
     {
-        this.x = rect.x;
-        this.y = rect.y;
-        this.width = rect.width;
-        this.height = rect.height;
-    }    
-  
+      if (param1 && param2 && param3 && param4)
+      {
+        this.x = param1;
+        this.y = param2;
+        this.width = param3;
+        this.height = param4;        
+      }
+      else
+      {
+        this.x = param1.x;
+        this.y = param1.y;
+        this.width = param1.width;
+        this.height = param1.height;
+      }
+    }
+    
     area() {
       return this.width * this.height;
     }
@@ -59,18 +69,13 @@ export default class Point
         point.y <= this.y + this.height
       );
     }
-  }
 
-  export function getSVGElementRect(parent, elementID)
-  {
-    const startStationElement = parent.getElementById(elementID);
-    if (startStationElement == null )
+    moveToVector(vector)
     {
-        console.log("Unable to find station with ID: ${elementID}");
-        return null;
+      return new Rect(this.x + vector.x, this.y + vector.y, this.width, this.height);
     }
-
-    return new Rect(startStationElement.getBBox());
   }
+
+
 
   

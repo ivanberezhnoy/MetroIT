@@ -2,6 +2,7 @@ import * as Utils from './utils/utils.js';
 import * as UIUTils from './utils/ui_utils.js';
 import * as API from './api.js';
 import * as Geometry from "./utils/Geometry.js"
+import * as SVG from "./utils/svg_utils.js"
 
 function loadRoutes()
 {
@@ -287,8 +288,8 @@ function updateTrainsPositions()
                     routesArrowSVG[routeID] = routeArrow;
                 }
 
-                const startStationBBox = Geometry.getSVGElementRect(svgElement, currentStationID);
-                const endStationBBox = Geometry.getSVGElementRect(svgElement, nextStationID);
+                const startStationBBox = SVG.getSVGElementRect(svgElement, currentStationID);
+                const endStationBBox = SVG.getSVGElementRect(svgElement, nextStationID);
                 const arrowSvgBBox = new Geometry.Rect(routeArrow.getBBox());
             
                 if (!startStationBBox || !endStationBBox || !arrowSvgBBox)
@@ -311,7 +312,7 @@ function updateTrainsPositions()
                         const prevStationInfo = routeSchedule[stationPointIndex - 1];
                         const prevStationID = lines[leneID]["stations"][prevStationInfo["lineStationIndex"]];
 
-                        const prevStationCenter = Geometry.getSVGElementRect(svgElement, prevStationID).getCenter();
+                        const prevStationCenter = SVG.getSVGElementRect(svgElement, prevStationID).getCenter();
 
                         moveVector = startStationCenter.subtract(prevStationCenter);
                         if (currentStationInfo.departure < currentSeconds)
@@ -358,6 +359,36 @@ function updateTrainsPositions()
     setTimeout(updateTrainsPositions, 100);
 }
 
+function handleSchemaClick(event)
+{
+    const clickPoint = new Geometry.Point(event.pageX, event.pageY);
+    
+    if (stations == null)
+    {
+        console.log("handleSchemaClick stations is not loaded yet");
+        return;
+    }
+
+    console.log(`Click point (${clickPoint.x}, ${clickPoint.y})`);
+
+    let clickStationID;
+    Object.keys(stations).forEach((stationID) => 
+    {
+        const stationRect = SVG.getSVGElementDocumentRect(svgElement, `ClickZone-Station-${stationID}`, false);
+
+        if (stationRect != null && stationRect.contains(clickPoint))
+        {
+            clickStationID = stationID;
+            return;
+        }
+    });
+
+    if (clickStationID)
+    {
+        console.log(`Click on station with ID: ${clickStationID}`);
+    }
+}
+
 function loadSchemaImage()
 {
     const imgSrc = './media/Схема метрополитен Харьков.svg';
@@ -373,6 +404,7 @@ function loadSchemaImage()
         
         document.getElementById('schemaContainer').appendChild(svgElement);
     
+        svgElement.addEventListener('click', handleSchemaClick);
         // Теперь можно получить доступ к элементам внутри SVG
         arrowSvgElement = svgElement.getElementById('arrow');
         if (arrowSvgElement) 
